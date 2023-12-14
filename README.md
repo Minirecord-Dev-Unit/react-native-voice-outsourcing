@@ -9,11 +9,11 @@
             alt="chat on Discord"></a>
 
 ```sh
-yarn add @react-native-voice/voice
+yarn add @wdragon/react-native-voice
 
 # or
 
-npm i @react-native-voice/voice --save
+npm i @wdragon/react-native-voice --save
 ```
 
 Link the iOS package
@@ -24,18 +24,10 @@ npx pod-install
 
 ## Table of contents
 
-- [Linking](#linking)
-  - [Manually Link Android](#manually-link-android)
-  - [Manually Link iOS](#manually-link-ios)
-- [Prebuild Plugin](#prebuild-plugin)
+- [Configuration in Expo](#expo-config)
 - [Usage](#usage)
   - [Example](#example)
 - [API](#api)
-- [Events](#events)
-- [Permissions](#permissions)
-  - [Android](#android)
-  - [iOS](#ios)
-- [Contributors](#contributors)
 
 <h2 align="center">Linking</h2>
 
@@ -45,58 +37,7 @@ npx pod-install
 react-native link @react-native-voice/voice
 ```
 
-### Manually Link Android
-
-- In `android/setting.gradle`
-
-```gradle
-...
-include ':@react-native-voice_voice', ':app'
-project(':@react-native-voice_voice').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-voice/voice/android')
-```
-
-- In `android/app/build.gradle`
-
-```gradle
-...
-dependencies {
-    ...
-    compile project(':@react-native-voice_voice')
-}
-```
-
-- In `MainApplication.java`
-
-```java
-
-import android.app.Application;
-import com.facebook.react.ReactApplication;
-import com.facebook.react.ReactPackage;
-...
-import com.wenkesj.voice.VoicePackage; // <------ Add this!
-...
-
-public class MainActivity extends Activity implements ReactApplication {
-...
-    @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-        new MainReactPackage(),
-        new VoicePackage() // <------ Add this!
-        );
-    }
-}
-```
-
-### Manually Link iOS
-
-- Drag the Voice.xcodeproj from the @react-native-voice/voice/ios folder to the Libraries group on Xcode in your poject. [Manual linking](https://reactnative.dev/docs/linking-libraries-ios.html)
-
-- Click on your main project file (the one that represents the .xcodeproj) select Build Phases and drag the static library, lib.Voice.a, from the Libraries/Voice.xcodeproj/Products folder to Link Binary With Libraries
-
-<h2 align="center">Prebuild Plugin</h2>
-
-> This package cannot be used in the "Expo Go" app because [it requires custom native code](https://docs.expo.io/workflow/customizing/).
+<h2 align="center">Configuration in Expo</h2>
 
 After installing this npm package, add the [config plugin](https://docs.expo.io/guides/config-plugins/) to the [`plugins`](https://docs.expo.io/versions/latest/config/app/#plugins) array of your `app.json` or `app.config.js`:
 
@@ -108,39 +49,35 @@ After installing this npm package, add the [config plugin](https://docs.expo.io/
 }
 ```
 
-Next, rebuild your app as described in the ["Adding custom native code"](https://docs.expo.io/workflow/customizing/) guide.
-
-### Props
-
-The plugin provides props for extra customization. Every time you change the props or plugins, you'll need to rebuild (and `prebuild`) the native app. If no extra properties are added, defaults will be used.
-
-- `speechRecognition` (_string | false_): Sets the message for the `NSSpeechRecognitionUsageDescription` key in the `Info.plist` message. When undefined, a default permission message will be used. When `false`, the permission will be skipped.
-- `microphone` (_string | false_): Sets the message for the `NSMicrophoneUsageDescription` key in the `Info.plist`. When undefined, a default permission message will be used. When `false`, the `android.permission.RECORD_AUDIO` will not be added to the `AndroidManifest.xml` and the iOS permission will be skipped.
-
-### Example
+Then, add permissions inside the app.json configuration:
 
 ```json
-{
-  "plugins": [
-    [
-      "@react-native-voice/voice",
-      {
-        "microphonePermission": "CUSTOM: Allow $(PRODUCT_NAME) to access the microphone",
-        "speechRecognitionPermission": "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech"
+"ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.SpeectToTextApp",
+ "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "This app uses speech recognition to convert your speech to text.",
+        "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page."
       }
-    ]
-  ]
-}
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "com.anonymous.SpeectToTextApp"
+    },
 ```
 
 <h2 align="center">Usage</h2>
 
-<p align="center"><a href="https://github.com/react-native-voice/voice/blob/master/example/src/VoiceTest.tsx">Full example for Android and iOS.</a></p>
+<p align="center"><a href="https://github.com/wdragon/react-native-voice/blob/master/example/src/VoiceTest.tsx">Full example for Android and iOS.</a></p>
 
 ### Example
 
 ```javascript
-import Voice from '@react-native-voice/voice';
+import Voice from '@wdragon/react-native-voice';
 import React, {Component} from 'react';
 
 class VoiceTest extends Component {
@@ -187,32 +124,6 @@ class VoiceTest extends Component {
 | Voice.onSpeechPartialResults(event) | Invoked when any results are computed.                 | `{ value: [..., 'Partial speech recognized'] }` | Android, iOS |
 | Voice.onSpeechVolumeChanged(event)  | Invoked when pitch that is recognized changed.         | `{ value: pitch in dB }`                        | Android      |
 
-<h2 align="center">Permissions</h2>
-
-<p align="center">Arguably the most important part.</p>
-
-### Android
-
-While the included `VoiceTest` app works without explicit permissions checks and requests, it may be necessary to add a permission request for `RECORD_AUDIO` for some configurations.
-Since Android M (6.0), [user need to grant permission at runtime (and not during app installation)](https://developer.android.com/training/permissions/requesting.html).
-By default, calling the `startSpeech` method will invoke `RECORD AUDIO` permission popup to the user. This can be disabled by passing `REQUEST_PERMISSIONS_AUTO: true` in the options argument.
-
-If you're running an ejected expo/expokit app, you may run into issues with permissions on Android and get the following error `host.exp.exponent.MainActivity cannot be cast to com.facebook.react.ReactActivity startSpeech`. This can be resolved by prompting for permssion using the `expo-permission` package before starting recognition.
-
-```js
-import { Permissions } from "expo";
-async componentDidMount() {
-	const { status, expires, permissions } = await Permissions.askAsync(
-		Permissions.AUDIO_RECORDING
-	);
-	if (status !== "granted") {
-		//Permissions not granted. Don't show the start recording button because it will cause problems if it's pressed.
-		this.setState({showRecordButton: false});
-	} else {
-		this.setState({showRecordButton: true});
-	}
-}
-```
 
 **Notes on Android**
 
@@ -241,23 +152,3 @@ Need to include permissions for `NSMicrophoneUsageDescription` and `NSSpeechReco
 </dict>
 ```
 
-Please see the documentation provided by ReactNative for this: [PermissionsAndroid](https://reactnative.dev/docs/permissionsandroid.html)
-
-[npm]: https://img.shields.io/npm/v/@react-native-voice/voice.svg?style=flat-square
-[npm-url]: https://npmjs.com/package/@react-native-voice/voice
-[circle-ci-badge]: https://img.shields.io/circleci/project/github/react-native-voice/voice/master.svg?style=flat-square
-
-<h2 align="center">Contributors</h2>
-
-- @asafron
-- @BrendanFDMoore
-- @brudny
-- @chitezh
-- @ifsnow
-- @jamsch
-- @misino
-- @Noitidart
-- @ohtangza & @hayanmind
-- @rudiedev6
-- @tdonia
-- @wenkesj

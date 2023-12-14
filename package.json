@@ -1,10 +1,10 @@
 {
-  "name": "@react-native-voice/voice",
-  "description": "React Native Native Voice library for iOS and Android",
-  "version": "3.2.4",
-  "author": "Sam Wenke <samwenke@gmail.com>",
+  "name": "@wdragon/react-native-voice",
+  "description": "React Native Native Voice library for iOS and Android, folk from @react-native-voice/voice",
+  "version": "3.3",
+  "author": "wdragon <wdragon521@gmail.com>",
   "private": false,
-  "homepage": "https://github.com/react-native-voice/voice",
+  "homepage": "https://github.com/wdragon/react-native-voice",
   "devDependencies": {
     "@react-native-community/eslint-config": "^0.0.7",
     "@semantic-release/git": "^9.0.0",
