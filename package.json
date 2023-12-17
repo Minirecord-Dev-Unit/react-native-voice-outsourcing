@@ -1,7 +1,7 @@
 {
   "name": "@wdragon/react-native-voice",
   "description": "React Native Native Voice library for iOS and Android, folk from @react-native-voice/voice",
-  "version": "3.3",
+  "version": "3.3.0",
   "author": "wdragon <wdragon521@gmail.com>",
   "private": false,
   "homepage": "https://github.com/wdragon/react-native-voice",
@@ -11,10 +11,11 @@
     "@tsconfig/node10": "^1.0.7",
     "@types/invariant": "^2.2.31",
     "@types/react-native": "0.61.17",
+    "@types/react": "16.8.6",
     "eslint": "^6.8.0",
     "lint-staged": "^7.2.0",
-    "react": "16.4.2",
-    "react-native": "^0.56.0",
+    "react": "16.8.6",
+    "react-native": "^0.60.0",
     "semantic-release": "^17.0.4",
     "typescript": "3.8.3"
   },
@@ -28,9 +29,6 @@
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "peerDependencies": {
-    "react-native": ">= 0.60.2"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/react-native-voice/voice.git"
@@ -49,7 +47,7 @@
     "lint:plugin": "eslint plugin/src/*"
   },
   "dependencies": {
-    "invariant": "^2.2.4",
-    "@expo/config-plugins": "^2.0.0"
+    "@expo/config-plugins": "^2.0.0",
+    "invariant": "^2.2.4"
   }
 }

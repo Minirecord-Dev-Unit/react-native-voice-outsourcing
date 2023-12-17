@@ -1,12 +1,5 @@
-![CircleCI branch][circle-ci-badge]
-[![npm][npm]][npm-url]
-
 <h1 align="center">React Native Voice</h1>
-<p align="center">A speech-to-text library for <a href="https://reactnative.dev/">React Native.</a></p>
-
-<a href="https://discord.gg/CJHKVeW6sp">
-<img src="https://img.shields.io/discord/764994995098615828?label=Discord&logo=Discord&style=for-the-badge"
-            alt="chat on Discord"></a>
+<p align="center">A speech-to-text library for <a href="https://reactnative.dev/">React Native.</a></p>. Folk from @react-native-voice/voice with a few improvements on usability.
 
 ```sh
 yarn add @wdragon/react-native-voice
@@ -28,14 +21,6 @@ npx pod-install
 - [Usage](#usage)
   - [Example](#example)
 - [API](#api)
-
-<h2 align="center">Linking</h2>
-
-<p align="center">Manually or automatically link the NativeModule</p>
-
-```sh
-react-native link @react-native-voice/voice
-```
 
 <h2 align="center">Configuration in Expo</h2>
 
