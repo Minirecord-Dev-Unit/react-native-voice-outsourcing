@@ -11,7 +11,7 @@ import Voice, {
   SpeechRecognizedEvent,
   SpeechResultsEvent,
   SpeechErrorEvent,
-} from '@react-native-voice/voice';
+} from '@wdragon/react-native-voice';
 
 function VoiceTest() {
   const [recognized, setRecognized] = useState('');

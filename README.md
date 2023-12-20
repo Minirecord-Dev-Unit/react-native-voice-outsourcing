@@ -29,7 +29,7 @@ After installing this npm package, add the [config plugin](https://docs.expo.io/
 ```json
 {
   "expo": {
-    "plugins": ["@react-native-voice/voice"]
+    "plugins": ["@wdragon/react-native-voice"]
   }
 }
 ```

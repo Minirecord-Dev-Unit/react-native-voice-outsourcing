@@ -1,7 +1,7 @@
 {
   "name": "@wdragon/react-native-voice",
   "description": "React Native Native Voice library for iOS and Android, folk from @react-native-voice/voice",
-  "version": "3.3.1",
+  "version": "3.3.3",
   "author": "wdragon <wdragon521@gmail.com>",
   "private": false,
   "homepage": "https://github.com/wdragon/react-native-voice",
@@ -31,7 +31,7 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git://github.com/react-native-voice/voice.git"
+    "url": "git://github.com/wdragon/react-native-voice.git"
   },
   "scripts": {
     "lint": "eslint src/*",
@@ -41,7 +41,7 @@
     "android": "yarn --cwd example android",
     "prepare": "yarn build && yarn build:plugin",
     "build": "tsc",
-    "dev-sync": "cp -r ./dist example/node_modules/@react-native-voice/voice",
+    "dev-sync": "cp -r ./dist example/node_modules/@wdragon/react-native-voice",
     "type-check": "tsc -noEmit",
     "build:plugin": "tsc --build plugin",
     "lint:plugin": "eslint plugin/src/*"
