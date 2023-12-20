@@ -364,7 +364,14 @@
                              addObject:transcription.formattedString];
                        }
 
-                       [self sendResult :nil :result.bestTranscription.formattedString :transcriptionDics :[NSNumber numberWithBool:isFinal]];
+                        NSMutableArray *transcriptionSegs =
+                             [NSMutableArray new];
+                         for (SFTranscriptionSegment *segment in result
+                                  .bestTranscription.segments) {
+                           [transcriptionSegs addObject:segment.substring];
+                         }
+
+                       [self sendResult :nil :transcriptionSegs :transcriptionDics :[NSNumber numberWithBool:isFinal]];
 
                        if (isFinal || self.recognitionTask.isCancelled ||
                            self.recognitionTask.isFinishing) {
@@ -494,16 +501,16 @@
   ];
 }
 
-- (void)sendResult:(NSDictionary *)
-             error:(NSString *)bestTranscription
+- (void)sendResult:(NSDictionary *)error
+                  :(NSArray *)bestTranscriptions
                   :(NSArray *)transcriptions
                   :(NSNumber *)isFinal {
   if (error != nil) {
     [self sendEventWithName:@"onSpeechError" body:@{@"error" : error}];
   }
-  if (bestTranscription != nil) {
+  if (bestTranscriptions != nil) {
     [self sendEventWithName:@"onSpeechResults"
-                       body:@{@"value" : @[ bestTranscription ]}];
+                       body:@{@"value" : bestTranscriptions}];
   }
   if (transcriptions != nil) {
     [self sendEventWithName:@"onSpeechPartialResults"

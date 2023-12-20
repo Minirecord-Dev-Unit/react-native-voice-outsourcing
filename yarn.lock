@@ -1439,14 +1439,6 @@
     lodash.unescape "4.0.1"
     semver "5.5.0"
 
-"@wdragon/react-native-voice@file:":
-  version "3.3.0"
-  resolved "file:"
-  dependencies:
-    "@expo/config-plugins" "^2.0.0"
-    "@wdragon/react-native-voice" "file:"
-    invariant "^2.2.4"
-
 abbrev@*, abbrev@1:
   version "1.1.1"
 

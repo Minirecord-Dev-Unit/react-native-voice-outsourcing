@@ -2,6 +2,7 @@
 .DS_STORE
 
 node_modules
+example/node_modules
 *.class
 .idea
 
