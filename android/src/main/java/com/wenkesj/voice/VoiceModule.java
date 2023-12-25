@@ -59,7 +59,7 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
       speech.destroy();
       speech = null;
     }
-    
+
     if(opts.hasKey("RECOGNIZER_ENGINE")) {
       switch (opts.getString("RECOGNIZER_ENGINE")) {
         case "GOOGLE": {
@@ -102,6 +102,11 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
         }
         case "EXTRA_PARTIAL_RESULTS": {
           intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, opts.getBoolean(key));
+          break;
+        }
+        case "EXTRA_SEGMENTED_SESSION": {
+          intent.putExtra(RecognizerIntent.EXTRA_SEGMENTED_SESSION, RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS);
+          intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 3000);
           break;
         }
         case "EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS": {
@@ -302,6 +307,18 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
     isRecognizing = false;
   }
 
+  /**
+   * For segmented voice recognitions
+   */
+  @Override
+  public void onEndOfSegmentedSession() {
+    WritableMap event = Arguments.createMap();
+    event.putBoolean("error", false);
+    sendEvent("onSpeechEnd", event);
+    Log.d("ASR", "onEndOfSegmentedSession()");
+    isRecognizing = false;
+  }
+
   @Override
   public void onError(int errorCode) {
     String errorMessage = String.format("%d/%s", errorCode, getErrorText(errorCode));
@@ -357,6 +374,23 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
     sendEvent("onSpeechResults", event);
     Log.d("ASR", "onResults()");
   }
+
+  @Override
+  public void onSegmentResults(Bundle results) {
+    WritableArray arr = Arguments.createArray();
+
+    ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+    if (matches != null) {
+      for (String result : matches) {
+        arr.pushString(result);
+      }
+    }
+    WritableMap event = Arguments.createMap();
+    event.putArray("value", arr);
+    sendEvent("onSpeechResults", event);
+    Log.d("ASR", "onResults()");
+  }
+
 
   @Override
   public void onRmsChanged(float rmsdB) {
