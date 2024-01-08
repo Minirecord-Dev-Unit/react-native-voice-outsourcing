@@ -1002,7 +1002,7 @@
     "@types/yargs-parser" "*"
 
 "@wdragon/react-native-voice@file:../":
-  version "3.3.3"
+  version "3.3.8"
   resolved "file:.."
   dependencies:
     "@expo/config-plugins" "^2.0.0"

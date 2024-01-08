@@ -276,6 +276,16 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
     callback.invoke(isRecognizing);
   }
 
+  @ReactMethod
+  public void addListener(String type) {
+    // Keep: Required for RN built in Event Emitter Calls.
+  }
+
+  @ReactMethod
+  public void removeListeners(int type) {
+    // Keep: Required for RN built in Event Emitter Calls.
+  }
+
   private void sendEvent(String eventName, @Nullable WritableMap params) {
     this.reactContext
       .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
