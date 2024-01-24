@@ -104,11 +104,6 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
           intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, opts.getBoolean(key));
           break;
         }
-        case "EXTRA_SEGMENTED_SESSION": {
-          intent.putExtra(RecognizerIntent.EXTRA_SEGMENTED_SESSION, RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS);
-          intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 3000);
-          break;
-        }
         case "EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS": {
           Double extras = opts.getDouble(key);
           intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, extras.intValue());
@@ -293,14 +288,6 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
   }
 
   @Override
-  public void onBeginningOfSpeech() {
-    WritableMap event = Arguments.createMap();
-    event.putBoolean("error", false);
-    sendEvent("onSpeechStart", event);
-    Log.d("ASR", "onBeginningOfSpeech()");
-  }
-
-  @Override
   public void onBufferReceived(byte[] buffer) {
     WritableMap event = Arguments.createMap();
     event.putBoolean("error", false);
@@ -314,18 +301,6 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
     event.putBoolean("error", false);
     sendEvent("onSpeechEnd", event);
     Log.d("ASR", "onEndOfSpeech()");
-    isRecognizing = false;
-  }
-
-  /**
-   * For segmented voice recognitions
-   */
-  @Override
-  public void onEndOfSegmentedSession() {
-    WritableMap event = Arguments.createMap();
-    event.putBoolean("error", false);
-    sendEvent("onSpeechEnd", event);
-    Log.d("ASR", "onEndOfSegmentedSession()");
     isRecognizing = false;
   }
 
@@ -371,22 +346,6 @@ public class VoiceModule extends ReactContextBaseJavaModule implements Recogniti
 
   @Override
   public void onResults(Bundle results) {
-    WritableArray arr = Arguments.createArray();
-
-    ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-    if (matches != null) {
-      for (String result : matches) {
-        arr.pushString(result);
-      }
-    }
-    WritableMap event = Arguments.createMap();
-    event.putArray("value", arr);
-    sendEvent("onSpeechResults", event);
-    Log.d("ASR", "onResults()");
-  }
-
-  @Override
-  public void onSegmentResults(Bundle results) {
     WritableArray arr = Arguments.createArray();
 
     ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
